@@ -1,8 +1,527 @@
-<html>
-    <head>
-        <litle>Hello</litle>
-    </head>
-    <body>
-       <h1>Hello Boy</h1>
-    </body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan Kevin & Siti</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-pink: #f8bbd0;
+            --secondary-purple: #e1bee7;
+            --accent-color: #ad1457;
+            --dark-text: #4a148c;
+            --pink-toast: #f06292;
+            --soft-purple: #ce93d8;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-text);
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* Canvas Bunga Berguguran */
+        #flower-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        h1, h2, h3, .navbar-brand {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-section {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=2070');
+        }
+
+        .couple-section {
+            background-image: linear-gradient(rgba(248, 187, 208, 0.8), rgba(225, 190, 231, 0.8)), url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=2069');
+            padding: 100px 0;
+        }
+
+        .event-section {
+            background-color: #fff;
+            padding: 80px 0;
+        }
+
+        .navbar-floating {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--primary-pink);
+        }
+
+        .navbar-floating .nav-link {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin: 0 10px;
+            font-size: 0.9rem;
+        }
+
+        #countdown {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .timer-unit {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 15px;
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .timer-unit span {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .carousel-caption-custom {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            width: 100%;
+        }
+
+        #music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .card-gift {
+            background: linear-gradient(135deg, var(--primary-pink), var(--secondary-purple));
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            border: none;
+        }
+
+        #chat-container {
+            height: 300px;
+            overflow-y: auto;
+            background: #fdf2f8;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .chat-bubble {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .toast-container {
+            z-index: 2000;
+        }
+        
+        .toast {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+
+        .toast-header {
+            background-color: var(--pink-toast);
+            color: white;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .btn-purple-soft {
+            background-color: var(--soft-purple);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-purple-soft:hover {
+            background-color: var(--dark-text);
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="flower-canvas"></canvas>
+
+    <div id="music-control" onclick="toggleMusic()">
+        <i id="music-icon" class="bi bi-play-circle-fill fs-3 text-success"></i>
+    </div>
+    
+    <audio id="bg-music" loop>
+        <!-- Menggunakan lagu Yung Kai - Blue (#t=40 untuk memulai dari bagian enak) -->
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3#t=40" type="audio/mpeg">
+        <p>Lagu: Yung Kai - Blue</p>
+    </audio>
+
+    <nav class="navbar-floating d-flex">
+        <a class="nav-link" href="#home">Home</a>
+        <a class="nav-link" href="#mempelai">Mempelai</a>
+        <a class="nav-link" href="#acara">Acara</a>
+        <a class="nav-link" href="#rsvp">Ucapan</a>
+    </nav>
+
+    <section id="home" class="parallax hero-section">
+        <div id="heroCarousel" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
+            <div class="carousel-inner h-100">
+                <div class="carousel-item active h-100">
+                    <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=2070" class="d-block w-100 h-100 object-fit-cover" alt="Slide 1">
+                </div>
+                <div class="carousel-item h-100">
+                    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=2070" class="d-block w-100 h-100 object-fit-cover" alt="Slide 2">
+                </div>
+            </div>
+            <div class="carousel-caption-custom">
+                <h1 class="display-1">Kevin & Siti</h1>
+                <p class="lead fs-4">Kami Mengundang Anda ke Pernikahan Kami</p>
+                <div id="countdown" class="justify-content-center">
+                    <div class="timer-unit"><span id="days">00</span>Hari</div>
+                    <div class="timer-unit"><span id="hours">00</span>Jam</div>
+                    <div class="timer-unit"><span id="minutes">00</span>Menit</div>
+                    <div class="timer-unit"><span id="seconds">00</span>Detik</div>
+                </div>
+                <button class="btn btn-light mt-4 rounded-pill px-4 py-2 text-pink shadow" data-bs-toggle="modal" data-bs-target="#qrModal">
+                    <i class="bi bi-qr-code-scan me-2"></i>Scan QR Check-in
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="mempelai" class="parallax couple-section text-center">
+        <div class="container bg-white bg-opacity-75 p-5 rounded-4 shadow-lg">
+            <h2 class="display-3 mb-4">Mempelai</h2>
+            <div class="row align-items-center">
+                <div class="col-md-5">
+                    <h3 class="display-5">Kevin Tri Nugroho</h3>
+                    <p>Putra dari Bapak Fulan & Ibu Fulanah</p>
+                </div>
+                <div class="col-md-2">
+                    <h2 class="display-4 text-pink">&</h2>
+                </div>
+                <div class="col-md-5">
+                    <h3 class="display-5">Siti Muyasaroh</h3>
+                    <p>Putri dari Bapak Fulan & Ibu Fulanah</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="acara" class="event-section">
+        <div class="container text-center">
+            <h2 class="display-4 mb-5">Waktu & Tempat</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm p-4 rounded-4" style="background: #fffafa;">
+                        <i class="bi bi-calendar-heart fs-1 text-danger mb-3"></i>
+                        <h3>Akad & Resepsi</h3>
+                        <p class="fs-5">Minggu, 29 Maret 2026<br>Pukul 09.00 WIB - Selesai</p>
+                        <hr>
+                        <p><strong>Gedung PKPRI</strong><br>Jl. Pemuda No.89, Kendal</p>
+                        <button onclick="openMaps()" class="btn btn-purple-soft rounded-pill mt-3 px-4 py-2 shadow-sm">
+                            <i class="bi bi-geo-alt-fill me-2"></i>Lihat Navigasi Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="hadiah" class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center">
+                    <h2 class="display-4 mb-4">Wedding Gift</h2>
+                    <p>Doa restu Anda adalah hadiah terindah, namun jika ingin memberi tanda kasih, silakan melalui:</p>
+                    <div class="card card-gift shadow mt-4">
+                        <h5>Bank Mandiri</h5>
+                        <h3 id="rekening">1360034091725</h3>
+                        <p>a.n. Kevin Tri Nugroho</p>
+                        <button onclick="copyAccount()" class="btn btn-light btn-sm rounded-pill w-50 mx-auto">
+                            <i class="bi bi-clipboard me-2"></i>Salin Nomor Rekening
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rsvp" class="py-5" style="background: var(--secondary-purple);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card border-0 shadow p-4 rounded-4">
+                        <h2 class="text-center mb-4">Ucapan & Doa Restu</h2>
+                        <div id="chat-container">
+                            <div class="chat-bubble">
+                                <strong>Admin:</strong> Selamat datang di buku tamu digital kami!
+                            </div>
+                        </div>
+                        <form id="wishForm">
+                            <div class="mb-3">
+                                <input type="text" id="guestName" class="form-control rounded-pill" placeholder="Nama Anda" required>
+                            </div>
+                            <div class="mb-3">
+                                <textarea id="guestWish" class="form-control rounded-4" rows="3" placeholder="Tulis ucapan..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 rounded-pill py-2" style="background: var(--accent-color); border: none;">
+                                Kirim Ucapan <i class="bi bi-send-fill ms-2"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-5 text-center bg-white">
+        <p>&copy; 2026 Kevin & Siti Wedding. Made with Love.</p>
+        <div class="mt-5 pb-5"></div>
+    </footer>
+
+    <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center">QR Code Presensi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-5">
+                    <div class="qr-placeholder mb-3">
+                        <i class="bi bi-qr-code fs-1 text-secondary" style="font-size: 100px !important;"></i>
+                    </div>
+                    <p class="text-muted">Tunjukkan QR Code ini kepada petugas penerima tamu untuk check-in/check-out.</p>
+                    <h4 class="text-pink">KS-2026-0329</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="margin-bottom: 80px;">
+        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+            <div class="toast-header">
+                <i class="bi bi-chat-heart-fill me-2"></i>
+                <strong class="me-auto" id="toastSender">Pesan Baru</strong>
+                <small>Baru saja</small>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                Seseorang mengirim doa restu!
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const canvas = document.getElementById('flower-canvas');
+        const ctx = canvas.getContext('2d');
+        let flowers = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Flower {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -20;
+                this.size = Math.random() * 10 + 5;
+                this.speed = Math.random() * 2 + 1;
+                this.wind = Math.random() * 1 - 0.5;
+                this.rotation = Math.random() * 360;
+                this.spin = Math.random() * 2 - 1;
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+            update() {
+                this.y += this.speed;
+                this.x += this.wind;
+                this.rotation += this.spin;
+                if (this.y > canvas.height + 20) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#ffc0cb';
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.bezierCurveTo(-this.size, -this.size, -this.size, this.size, 0, this.size);
+                ctx.bezierCurveTo(this.size, this.size, this.size, -this.size, 0, 0);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initFlowers() { for (let i = 0; i < 50; i++) flowers.push(new Flower()); }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            flowers.forEach(f => { f.update(); f.draw(); });
+            requestAnimationFrame(animate);
+        }
+        initFlowers();
+        animate();
+
+        const targetDate = new Date("March 29, 2026 09:00:00").getTime();
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            $('#days').text(days.toString().padStart(2, '0'));
+            $('#hours').text(hours.toString().padStart(2, '0'));
+            $('#minutes').text(minutes.toString().padStart(2, '0'));
+            $('#seconds').text(seconds.toString().padStart(2, '0'));
+        }
+        setInterval(updateCountdown, 1000);
+
+        const music = document.getElementById('bg-music');
+        const musicIcon = document.getElementById('music-icon');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                musicIcon.className = 'bi bi-play-circle-fill fs-3 text-success';
+            } else {
+                music.play();
+                musicIcon.className = 'bi bi-pause-circle-fill fs-3 text-danger';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        $(document).one('click touchstart', function() {
+            if(!isPlaying) {
+                // Memberitahu browser untuk memulai dari detik ke-40 (Blue - Yung Kai)
+                if(music.currentTime < 40) music.currentTime = 40; 
+                music.play().then(() => {
+                    isPlaying = true;
+                    musicIcon.className = 'bi bi-pause-circle-fill fs-3 text-danger';
+                }).catch(e => console.log("Audio play blocked"));
+            }
+        });
+
+        const dummyWishes = [
+            { name: "Rizky", text: "Selamat menempuh hidup baru Kevin & Siti!" },
+            { name: "Dewi Pratama", text: "Semoga menjadi keluarga yang Sakinah Mawaddah Warahmah." }
+        ];
+
+        function showToast(sender, message) {
+            const toastEl = document.getElementById('liveToast');
+            const toast = new bootstrap.Toast(toastEl);
+            $('#toastSender').text(sender);
+            $('#toastMessage').text(message);
+            toast.show();
+        }
+
+        let wishIndex = 0;
+        setInterval(() => {
+            const wish = dummyWishes[wishIndex];
+            showToast(wish.name, wish.text);
+            $('#chat-container').append(`<div class="chat-bubble"><strong>${wish.name}:</strong> ${wish.text}</div>`);
+            $('#chat-container').scrollTop($('#chat-container')[0].scrollHeight);
+            wishIndex = (wishIndex + 1) % dummyWishes.length;
+        }, 8000);
+
+        $('#wishForm').on('submit', function(e) {
+            e.preventDefault();
+            const name = $('#guestName').val();
+            const wish = $('#guestWish').val();
+            if(name && wish) {
+                $('#chat-container').append(`<div class="chat-bubble" style="border-left: 4px solid var(--accent-color)"><strong>${name}:</strong> ${wish}</div>`);
+                $('#chat-container').scrollTop($('#chat-container')[0].scrollHeight);
+                showToast("Sistem", `Terima kasih ${name}, ucapan Anda telah terkirim!`);
+                $('#guestName').val(''); $('#guestWish').val('');
+            }
+        });
+
+        function openMaps() { window.open('https://www.google.com/maps/dir/?api=1&destination=-6.921907,110.196946', '_blank'); }
+        function copyAccount() {
+            const rek = $('#rekening').text();
+            const tempInput = $("<input>");
+            $("body").append(tempInput);
+            tempInput.val(rek).select();
+            document.execCommand("copy");
+            tempInput.remove();
+            showToast("Sistem", "Nomor rekening berhasil salin!");
+        }
+
+        $('a.nav-link').on('click', function(event) {
+            if (this.hash !== "") {
+                event.preventDefault();
+                $('html, body').animate({ scrollTop: $(this.hash).offset().top }, 800);
+            }
+        });
+    </script>
+</body>
 </html>
